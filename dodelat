@@ -1,2 +1,6 @@
 from django.shortcuts import render
 from model import Room
+
+def komnat(qwerty):
+    komnat = Room.objects.all()
+    return render(qwerty, "komnat.html", {"komnat": komnat})
