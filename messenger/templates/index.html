@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        /* Стили для сообщений */
+        .message {
+            background-color: #e0f7fa; /* Цвет фона сообщения */
+            border: 1px solid #006064; /* Цвет границы */
+            border-radius: 5px; /* Закругление углов */
+            padding: 10px; /* Отступ внутри сообщения */
+            margin: 5px 0; /* Отступ между сообщениями */
+        }
+        /* Стили для контейнера сообщений */
+        #messages {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc; /* Цвет границы контейнера */
+            padding: 10px; /* Отступ внутри контейнера */
+        }
+        /* Стили для ввода и кнопки */
+        input {
+            margin: 5px;
+            padding: 10px;
+            width: calc(100% - 22px); /* Учитываем отступы */
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="messages"></div>
+    <input id="username" placeholder="Ваше имя">
+    <input id="message_input" placeholder="Введите сообщение">
+    <button id="send_button">Отправить</button>
+
+    <script>
+        const socket = io();
+
+        const sendButton = document.getElementById('send_button');
+        const messageInput = document.getElementById('message_input');
+        const usernameInput = document.getElementById('username');
+        const messagesContainer = document.getElementById('messages');
+
+        sendButton.addEventListener('click', () => {
+            const username = usernameInput.value || 'Аноним';
+            const message = messageInput.value;
+
+            if (message.trim() !== '') {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.textContent = `${username}: ${message}`;
+
+                messagesContainer.appendChild(messageElement);
+                messageInput.value = '';
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                socket.emit('chat message', { username, message });
+            }
+        });
+
+        socket.on('chat message', (data) => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.textContent = `${data.username}: ${data.message}`;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        });
+    </script>
+</body>
+</html>
