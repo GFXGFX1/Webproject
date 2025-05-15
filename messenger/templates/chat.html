@@ -22,11 +22,12 @@
             margin-bottom: 10px;
         }
         .message {
-            background-color: #e0f7fa;
-            border: 1px solid #006064;
+            background-color: #fff;
+            border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
             margin: 5px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         #message-input {
             width: 80%;
@@ -49,31 +50,37 @@
 </head>
 <body>
     <h1>Добро пожаловать в чат!</h1>
-    <div id="chat-box"></div>
-    <input type="text" id="message-input" placeholder="Введите ваше сообщение...">
+    <div id="chat-box">
+        {% for message in messages %}
+            <div class="message">{{ message.username }}: {{ message.content }}</div>
+        {% endfor %}
+    </div>
+    <input type="text" id="message-input" placeholder="Введите ваше сообщение..." required>
     <button id="send-button">Отправить</button>
 
     <script>
         const socket = io();
 
-        // Отправка сообщения
         document.getElementById('send-button').onclick = function() {
             const messageInput = document.getElementById('message-input');
             const message = messageInput.value;
+
             if (message) {
-                socket.emit('send_message', message);
-                messageInput.value = '';
+                // Отправляем сообщение на сервер
+                socket.emit('send_message', { message: message, username: 'Аноним' });
+                messageInput.value = ''; // Очищаем поле ввода сообщения
+            } else {
+                alert("Пожалуйста, введите сообщение."); 
             }
         };
 
-        // Получение сообщений
-        socket.on('receive_message', function(message) {
+        socket.on('receive_message', function(data) {
             const chatBox = document.getElementById('chat-box');
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
-            messageElement.textContent = message;
+            messageElement.textContent = `${data.username}: ${data.message}`; 
             chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight; // Прокрутка вниз
+            chatBox.scrollTop = chatBox.scrollHeight; 
         });
     </script>
 </body>
