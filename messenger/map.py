@@ -96,7 +96,7 @@ class MapViewer(QWidget):
             self.image_label.setPixmap(self.pixmap)
 
     def reset_search_result(self):
-        self.coordinates = [37.618423, 55.751244]  
+        self.coordinates = [37.618423, 55.751244]  # Тут тоже Москва
         self.marker_coordinates = self.coordinates.copy()
         self.found_address = ""
         self.address_label.setText("Address: ")
