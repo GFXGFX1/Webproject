@@ -10,7 +10,7 @@ SCREEN_HEIGHT = 450
 class MapViewer(QWidget):
     def __init__(self):
         super().__init__()
-        self.coordinates = [37.618423, 55.751244]  # Longitude, Latitude (Moscow)
+        self.coordinates = [37.618423, 55.751244]  # Москва
         self.scale = 10
         self.map_style = 'map'
         self.marker_coordinates = self.coordinates.copy()
@@ -96,12 +96,12 @@ class MapViewer(QWidget):
             self.image_label.setPixmap(self.pixmap)
 
     def reset_search_result(self):
-        self.coordinates = [37.618423, 55.751244]  # Moscow coordinates
+        self.coordinates = [37.618423, 55.751244]  
         self.marker_coordinates = self.coordinates.copy()
         self.found_address = ""
         self.address_label.setText("Address: ")
-        self.update_map_image()  # Update map image to show the reset position
-        self.search_input.clear()  # Clear the search input
+        self.update_map_image() 
+        self.search_input.clear()
 
 
 if __name__ == "__main__":
