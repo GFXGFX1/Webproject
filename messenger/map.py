@@ -52,9 +52,6 @@ class MapViewer(QWidget):
         self.reset_button = QPushButton("Reset Search Result", self)
         self.reset_button.clicked.connect(self.reset_search_result)
 
-        self.theme_button = QPushButton("Toggle Map Style", self)
-        self.theme_button.clicked.connect(self.toggle_map_style)
-
         self.address_label = QLabel(self)
         self.address_label.setText("Address: ")
 
@@ -63,7 +60,6 @@ class MapViewer(QWidget):
         layout.addWidget(self.search_input)
         layout.addWidget(self.search_button)
         layout.addWidget(self.reset_button)
-        layout.addWidget(self.theme_button)
         layout.addWidget(self.address_label)
         self.setLayout(layout)
 
@@ -73,7 +69,7 @@ class MapViewer(QWidget):
             print("Search query cannot be empty.")
             return
 
-        search_url = f"https://geocode-maps.yandex.ru/1.x/?apikey=YOUR_API_KEY&geocode={query}&format=json"  # Замените YOUR_API_KEY
+        search_url = f"https://geocode-maps.yandex.ru/1.x/?apikey=8013b162-6b42-4997-9691-77b7074026e0&geocode={query}&format=json"
         response = requests.get(search_url)
 
         if response.ok:
@@ -107,9 +103,6 @@ class MapViewer(QWidget):
         self.update_map_image()  # Update map image to show the reset position
         self.search_input.clear()  # Clear the search input
 
-    def toggle_map_style(self):
-        self.map_style = 'sat' if self.map_style == 'map' else 'map'
-        self.update_map_image()  # Update the map image with the new style
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
