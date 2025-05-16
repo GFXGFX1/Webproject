@@ -5,6 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Чат</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8; /* Светлый фон */
+            color: #333; /* Темный текст */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4a90e2; /* Синий заголовок */
+        }
+
+        #messages {
+            border: 1px solid #ccc; /* Рамка для сообщений */
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+            height: 300px;
+            overflow-y: auto; /* Прокрутка для длинных сообщений */
+            background-color: #ffffff; /* Белый фон для сообщений */
+        }
+
+        #messageInput {
+            width: calc(100% - 22px); /* Полная ширина с учетом отступов */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4a90e2; /* Синий фон для кнопок */
+            color: white; /* Белый текст */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357ab8; /* Темнее при наведении */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .message {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #e7f3fe; /* Легкий фон для сообщений */
+        }
+    </style>
     <script>
         var socket = io();
 
@@ -16,7 +75,8 @@
 
         socket.on('receive_message', function(data) {
             var messages = document.getElementById('messages');
-            messages.innerHTML += '<p><strong>' + data.username + ':</strong> ' + data.message + '</p>';
+            messages.innerHTML += '<div class="message"><strong>' + data.username + ':</strong> ' + data.message + '</div>';
+            messages.scrollTop = messages.scrollHeight; // Прокрутка вниз
         });
 
         function openMap() {
@@ -28,11 +88,15 @@
     <h2>Добро пожаловать, {{ username }}!</h2>
     <div id="messages">
         {% for message in messages %}
-            <p><strong>{{ message.username }}:</strong> {{ message.content }}</p>
+            <div class="message"><strong>{{ message.username }}:</strong> {{ message.content }}</div>
         {% endfor %}
     </div>
-    <input id="messageInput" type="text" placeholder="Введите сообщение">
-    <button onclick="sendMessage()">Отправить</button>
-    <button onclick="openMap()">Открыть карту</button>
+    <div class="button-container">
+        <input id="messageInput" type="text" placeholder="Введите сообщение">
+        <button onclick="sendMessage()">Отправить</button>
+    </div>
+    <div class="button-container">
+        <button onclick="openMap()">Открыть карту</button>
+    </div>
 </body>
 </html>
